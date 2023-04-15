@@ -1,0 +1,45 @@
+{% include '_site_map.html' %}
+
+
+<h1>Private Work Page 🕵️</h1>
+
+<p>Hello {{ user.username }}!</p>
+
+<p>Welcome to this private page. You can only see if you are logged in!</p>
+
+
+
+<hr>
+
+{% for i in data %}
+
+    <ul class="m-0 list-item">
+      <li>
+        <div class="d-flex flex-row align-items-center">
+          <div class="col-md-2 p-0">
+            <p class="m-0"><b>{{i}}</b></p>
+          </div>
+          <div class="col-md-2 p-2">
+            <p class="m-0"><b>{{i['id']}}</b></p>
+          </div>
+          <div class="col-md-3">
+            <b>Link:</b> <a href={{i['name']}}>Finish Quality Checking now!!</a>
+          </div>
+          <div class="col-md-2 ">
+            Status:<button type="button" id="change" class="btn btn-success ms-3 {{i['status']}}">{{i['status']}}</button>
+          </div>
+          <div class="col-md-2 " id="checkbox-container">
+           
+          </div>
+        
+        
+      </div>
+      </li>
+    </ul>
+
+
+  </div>
+
+  <br>
+
+  {% endfor %}
