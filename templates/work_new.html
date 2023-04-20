@@ -1,0 +1,35 @@
+{% include '_site_map.html' %}
+<div class="container py-4">
+  <h2>Quality Check CompFox 🕵️</h2>
+  <div class="border p-5 w-75 rounded shadow">
+    <h4>Hello {{ user.username }}!</h4>
+    <p class="large opacity-75">
+      Welcome to this private page. You can only see if you are logged in!
+    </p>
+  </div>
+
+  {% for i in data %}
+  <div class="mt-5 py-3 border rounded shadow">
+    <ul>
+      <div class="d-flex flex-row align-items-center">
+        <div class="col-md-2 p-0">
+          <p class="m-0"><b>{{i}}</b></p>
+        </div>
+        <div class="col-md-2 p-2">
+          <p class="m-0"><b>{{data[i]['filename']}}</b></p>
+        </div>
+        <div class="col-md-3">
+          <b>Link:</b> <a href="/work/{{i}}">Finish Quality Checking now!!</a>
+        </div>
+        <div class="col-md-2">
+          Status:
+          <button class="button bg- {{data[i]['status']}} ms-3 p-2">
+            {{i['status']}}
+          </button>
+        </div>
+      </div>
+    </ul>
+  </div>
+
+  {% endfor %}
+</div>

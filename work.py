@@ -61,7 +61,7 @@ async def get_first_100():
                 id=get_id()
                 data[id]={}
                 data[id]['filename']=name
-                data[id]['status']='default'
+                data[id]['status']='warning'
                 my_dict = json.loads(html_contents)
                 data[id]['html']=my_dict
         else:

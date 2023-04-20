@@ -2,8 +2,33 @@
 This code snippet will appear in each file, so to avoid re-writing it we define 
 it only once here. 
 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-<a href="/">Home</a> | 
-<a href="/auth/login">Login</a> |
-<a href="/work">Start Working</a> |
-<a href="/auth/logout">Logout</a>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<nav class="navbar-expand-lg navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+
+                <li class="nav-item ms-3">
+                    <a class="nav-link active" href="/auth/login">Login</a>
+                </li>
+               
+                <li class="nav-item ms-3">
+                    <a class="nav-link active" href="/auth/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -14,8 +14,12 @@ from pydantic import BaseModel
 from rich import inspect, print
 from rich.console import Console
 from work import get_json,get_first_100
-from work import logger
+import logging
 console = Console()
+
+
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+logging.warning('This will get logged to a file')
 
 
 # --------------------------------------------------------------------------
@@ -203,6 +207,7 @@ def login_for_access_token(
 # --------------------------------------------------------------------------
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
+    logging.info("Home Page")
     try:
         user = get_current_user_from_cookie(request)
     except:
@@ -212,6 +217,9 @@ async def index(request: Request):
         "request": request,
     }
     return templates.TemplateResponse("index.html", context)
+@app.get("/not_authenticated", response_class=HTMLResponse)
+async def not_authenticated(request:Request):
+    return templates.TemplateResponse("not_authenticated.html", {"request": request})
 
 
 # --------------------------------------------------------------------------
@@ -221,76 +229,81 @@ async def index(request: Request):
 @app.get("/work", response_class=HTMLResponse)
 async def index(request: Request, background_tasks: BackgroundTasks,user: User = Depends(get_current_user_from_token)):
     d={}
+    if not user:
+        logging.info("No usrr found in work page direct access...")
+        context = {"request": request}
+        return templates.TemplateResponse("not_authenticated.html",context)
     if user.username == "qa1@1kcompfox.com":
+        logging.info("User1 exists...")
         try:
             if(os.path.isfile('db4_data.json')):
                 t=open("db4_data.json","r")
                 d=json.loads(t.read())
-                logger.log("Data-file found in app.")
+                logging.info("Data-file 1 found in app.")
             else:
                 background_tasks.add_task(get_first_100)
-                logger.log("Data loading started in background.")
+                logging.info("Data loading started in background. file 1")
 
         except:
-            logger.error("No db found")
-            print("Data Not loaded till now!! i.e the 1k file")
-            logger.error("Some error occured while loading db4 inside /work route. for 1k user file")
+            logging.error("No db found")
+            print("Data Not loaded  or maybe cached in app till now!! i.e the 1k file")
+            logging.error("Some error occured while loading db4 inside /work route. for 1k user file")
     if user.username == "qa2@2kcompfox.com":
         try:
             if(os.path.isfile('db4_data_2k.json')):
                 t=open("db4_data_2k.json","r")
                 d=json.loads(t.read())
-                logger.log("Data-file found in app.")
+                logging.log("Data-file found in app.")
             else:
                 background_tasks.add_task(get_second_100)
-                logger.log("Data loading started in background.")
+                logging.log("Data loading started in background.")
 
         except:
-            logger.error("No db found")
+            logging.error("No db found")
             print("Data Not loaded till now!! i.e the 2k file")
-            logger.error("Some error occured while loading db4 inside /work route. for 2k user file")
+            logging.error("Some error occured while loading db4 inside /work route. for 2k user file")
     if user.username == "qa3@3kcompfox.com":
         try:
             if(os.path.isfile('db4_data_3k.json')):
                 t=open("db4_data_3k.json","r")
                 d=json.loads(t.read())
-                logger.log("Data-file found in app.")
+                logging.log("Data-file found in app.")
             else:
                 background_tasks.add_task(get_third_100)
-                logger.log("Data loading started in background.")
+                logging.log("Data loading started in background.")
 
         except:
-            logger.error("No db found")
+            logging.error("No db found")
             print("Data Not loaded till now!! i.e the 3k file")
-            logger.error("Some error occured while loading db4 inside /work route. for 3k user file")
+            logging.error("Some error occured while loading db4 inside /work route. for 3k user file")
     if user.username == "qa3@3kcompfox.com":
         try:
             if(os.path.isfile('db4_data_3k.json')):
                 t=open("db4_data_3k.json","r")
                 d=json.loads(t.read())
-                logger.log("Data-file found in app.")
+                logging.log("Data-file found in app.")
             else:
                 background_tasks.add_task(get_third_100)
-                logger.log("Data loading started in background.")
+                logging.log("Data loading started in background.")
 
         except:
-            logger.error("No db found")
+            logging.error("No db found")
             print("Data Not loaded till now!! i.e the 3k file")
-            logger.error("Some error occured while loading db4 inside /work route. for 3k user file")
+            logging.error("Some error occured while loading db4 inside /work route. for 3k user file")
     if user.username == "qa4@4kcompfox.com":
         try:
             if(os.path.isfile('db4_data_4k.json')):
                 t=open("db4_data_4k.json","r")
                 d=json.loads(t.read())
-                logger.log("Data-file found in app.")
+                logging.log("Data-file found in app.")
             else:
                 background_tasks.add_task(get_fourth_100)
-                logger.log("Data loading started in background.")
+                logging.log("Data loading started in background.")
 
         except:
-            logger.error("No db found")
+            logging.error("No db found")
             print("Data Not loaded till now!! i.e the 2k file")
-            logger.error("Some error occured while loading db4 inside /work route. for 2k user file")
+            logging.error("Some error occured while loading db4 inside /work route. for 2k user file")
 
 
     context = {
@@ -300,7 +313,7 @@ async def index(request: Request, background_tasks: BackgroundTasks,user: User =
 
 
     }
-    return templates.TemplateResponse("work.html", context)
+    return templates.TemplateResponse("work_new.html", context)
 
 
 
@@ -312,39 +325,40 @@ async def index(request: Request, background_tasks: BackgroundTasks,user: User =
 # A private page for each id that only logged in users can access.
 if os.path.isfile('db4_data.json'):
     d=open('db4_data.json','r')
-    read=d.read()
-@app.get("/work/<id>", response_class=HTMLResponse)
-async def load_work_id(request: Request,user: User = Depends(get_current_user_from_token)):
-    obj = next((obj for obj in read if obj["id"] == id), None)
-    if obj:
-        pages=obj['html']
-    else:
+    read=json.loads(d.read())
+
+
+@app.get("/test/{id}",response_class=HTMLResponse)
+def test_get(request: Request,id):
+    context = {
+        "request": request,
+        "id":id,
+    }
+    return templates.TemplateResponse("test.html", context)
+
+
+@app.get("/work/{id}", response_class=HTMLResponse)
+async def load_work_id(request: Request, id: str,user: User = Depends(get_current_user_from_token)):
+    obj = read.get(id, None)
+    if not obj:
+        logging.warning('This is a Warning')
         return "Error: Object not found"
-    if request.method=='POST':
-        global current_page
-        current_page = (current_page + 1) % len(pages)
-        context={
-            "request": request,
-            "pages":pages,
-            "current_page":current_page,
-            "obj":obj,
 
-        }
-        # return render_template('index_test.html', pages=pages, current_page=current_page,)
-        return templates.TemplateResponse("work_id.html", context)
-        
-    else:
-        context={
-            "request": request,
-            "pages":pages,
-            "current_page":0,
-            "obj":obj,
+    pages = obj['html']
+    logging.warning('This is a Warning')
 
+    # if request.method == 'POST':
+        # global current_page
+        # current_page = (current_page + 1) % len(pages)
 
-        }
-        return templates.TemplateResponse("work_id.html", context)
-
-
+    context = {
+        "request": request,
+        "pages": pages,
+        "current_page": 0,
+        "obj": obj,
+        "user":user,
+    }
+    return templates.TemplateResponse("work_id.html", context)
 
 
 

@@ -1,22 +1,44 @@
 {% include '_site_map.html' %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap" rel="stylesheet">
 
-<h1>Home page 🏡</h1>
+<div class="w-100 d-flex align-items-center justify-content-center mb-4">
+    <h2 class="addy"><u>Quality Check CompFox</u></h2>
+</div>
+<div class="container py-4">
+    <div class="mb-4">
+        <!-- <h2>Home page 🏡</h2> -->
+        <h2 class="large">Welcome to the home page 🏡.</h2>
+    </div>
+    
 
-<p>Welcome to the home page.</p>
+    <div class="border p-5 w-75 rounded shadow">
 
-{% if user %}
-    <h2>You are logged in :)</h2>
-    <p>
-        Hi {{ user.username }}! You are logged in, so you can access the private working  
-        page. <a href="/work">here</a>!
-    </p>
-{% else %}
-    <h2>You are NOT logged in :(</h2>
-    <p>
-        Hello stranger. You are not logged. Please follow the link to
-        <a href="/auth/login" class="btn">login</a>!
-    </p>
-{% endif %}
+
+        {% if user %} 
+        <h2>You are logged in :)</h2>
+        <p>
+            Hi {{ user.username }}! You are logged in, so you can access the private working
+            page. <a href="/work">here</a>!
+        </p>
+
+
+        {% else %} 
+        <h2>You are NOT logged in :(</h2>
+        <p>
+            Hello stranger. You are not logged. Please follow the link to
+            <a href="/auth/login">login</a>!
+        </p> 
+
+
+        {% endif %} 
+    </div>
 
 <hr>
+<style>
+    .addy{
+        font-family: 'Arvo', serif;
+    }
+</style>
 
