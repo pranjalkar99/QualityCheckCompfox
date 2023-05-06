@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://storage.googleapis.com/storage/v1/client.js"></script>
+
   <script>
     
   </script>
@@ -62,7 +64,7 @@
           
   
                   function saveHTMLlocal() {
-                    const num=document.getElementById("updatenum").innerHTML;
+                    const num = document.getElementById("updatenum").innerHTML;
                     const editor = document.getElementById("editor");
                     const gfg = document.URL;
                     const time = new Date().getTime();
@@ -71,22 +73,31 @@
                       contentType: "text/html",
                       size: html.length,
                       lastModified: new Date().getTime(),
-                      num:num,
+                      num: num,
                     };
-                    
+                  
                     const data = {
                       metadata: metadata,
                       html: html,
                     };
-                    
-                    const jsonString = JSON.stringify(data);
-                    localStorage.setItem(gfg, jsonString);
-                    
+                  
+                    const existingData = localStorage.getItem(gfg);
+                    if (existingData) {
+                      const existingJson = JSON.parse(existingData);
+                      const existingNum = existingJson.metadata.num;
+                      if (existingNum !== num) {
+                        localStorage.setItem(gfg + "_" + existingNum, existingData);
+                        localStorage.setItem(gfg, JSON.stringify(data));
+                      }
+                    } else {
+                      localStorage.setItem(gfg, JSON.stringify(data));
+                    }
+                  
                     const a = document.createElement("a");
                     a.href = "data:text/html;charset=utf-8," + encodeURIComponent(html);
                     a.download = gfg + "_" + time + ".html";
                     a.click();
-                    
+                  
                     alert("<b>Content saved in your browser local! To preserve your changes, click 'Save changes to GCP', after completing all pages...</b> <p>You can see your changes, in this download.</p>");
                   }
                   
@@ -155,14 +166,59 @@
               console.log("ya bitch!!")
             }
           }// Not working --> iT is a bug!!!
-
-
+          
           function uploadToGCP() {
-            console.log("update status");
 
-            alert("Uploading to GCP," );
-            console.log("updating status to GCP.");
-          }
+            // The ID of your GCS bucket
+                const bucketName = 'your-unique-bucket-name';
+
+                // The new ID for your GCS file
+                const destFileName = 'your-new-file-name';
+
+                // Imports the Google Cloud client library
+                const { Storage } = require('@google-cloud/storage');
+
+                // Creates a client
+                const storage = new Storage();
+
+
+                console.log("update status");
+
+  alert("Uploading to GCP...");
+  console.log("updating status to GCP.");
+  const storageKeys = Object.keys(localStorage);
+  const data = [];
+
+
+  for (let i = 0; i < storageKeys.length; i++) {
+    const key = storageKeys[i];
+    const jsonString = localStorage.getItem(key);
+    const item = JSON.parse(jsonString);
+    data.push(item.html);
+  }
+
+  const requestData = {
+    "data": data
+  };
+
+  const file = storage.bucket(bucketName).file(destFileName);
+  const stream = file.createWriteStream({
+    metadata: {
+      contentType: 'application/json'
+    }
+  });
+  stream.on('error', (err) => {
+    console.error(err);
+    alert('Error uploading data.');
+  });
+  stream.on('finish', () => {
+    alert('Data sent successfully!');
+  });
+
+  stream.end(JSON.stringify(requestData));
+}
+  
+         
           // write a update_status function here
           function update_status() {
             console.log("update status");

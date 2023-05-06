@@ -1,30 +1,22 @@
-2023-05-06 20:16:46,679 This will get logged to a file
-2023-05-06 20:16:52,708 This is a Warning jsut checking from /work
-2023-05-06 20:16:55,505 This is a Warning jsut checking from /work
-2023-05-06 20:16:56,454 This is a Warning jsut checking from /work
-2023-05-06 20:17:03,753 Home Page
-2023-05-06 20:17:11,390 Home Page
-2023-05-06 20:17:13,974 Calling on_field_start with no data
-2023-05-06 20:17:13,974 Calling on_field_name with data[0:8]
-2023-05-06 20:17:13,974 Calling on_field_data with data[9:28]
-2023-05-06 20:17:13,974 Calling on_field_end with no data
-2023-05-06 20:17:13,974 Calling on_field_start with no data
-2023-05-06 20:17:13,974 Calling on_field_name with data[29:37]
-2023-05-06 20:17:13,974 Calling on_field_data with data[38:46]
-2023-05-06 20:17:13,975 Calling on_field_end with no data
-2023-05-06 20:17:13,975 Calling on_end with no data
-2023-05-06 20:17:14,891 Home Page
-2023-05-06 20:17:16,682 User1 exists...
-2023-05-06 20:17:16,787 Data-file 1 found in app.
-2023-05-06 20:17:18,123 This is a Warning jsut checking from /work
-2023-05-06 20:18:01,884 This is a Warning jsut checking from /work
-2023-05-06 20:22:55,579 This is a Warning jsut checking from /work
-2023-05-06 20:23:50,546 This is a Warning jsut checking from /work
-2023-05-06 20:29:22,126 This is a Warning jsut checking from /work
-2023-05-06 20:29:52,572 This is a Warning jsut checking from /work
-2023-05-06 20:30:03,960 This is a Warning jsut checking from /work
-2023-05-06 20:33:10,230 This is a Warning jsut checking from /work
-2023-05-06 20:33:22,721 This is a Warning jsut checking from /work
-2023-05-06 20:33:26,236 This is a Warning jsut checking from /work
-2023-05-06 20:33:29,779 This is a Warning jsut checking from /work
-2023-05-06 20:33:44,048 This is a Warning jsut checking from /work
+2023-05-07 02:10:23,263 This will get logged to a file
+2023-05-07 02:12:21,657 This is a Warning jsut checking from /work
+2023-05-07 02:13:09,623 This is a Warning jsut checking from /work
+2023-05-07 02:13:20,913 Home Page
+2023-05-07 02:13:31,896 Home Page
+2023-05-07 02:13:34,711 Calling on_field_start with no data
+2023-05-07 02:13:34,711 Calling on_field_name with data[0:8]
+2023-05-07 02:13:34,711 Calling on_field_data with data[9:28]
+2023-05-07 02:13:34,711 Calling on_field_end with no data
+2023-05-07 02:13:34,711 Calling on_field_start with no data
+2023-05-07 02:13:34,711 Calling on_field_name with data[29:37]
+2023-05-07 02:13:34,711 Calling on_field_data with data[38:46]
+2023-05-07 02:13:34,712 Calling on_field_end with no data
+2023-05-07 02:13:34,712 Calling on_end with no data
+2023-05-07 02:13:35,451 Home Page
+2023-05-07 02:13:39,748 User1 exists...
+2023-05-07 02:13:39,840 Data-file 1 found in app.
+2023-05-07 02:13:41,266 This is a Warning jsut checking from /work
+2023-05-07 02:14:17,826 This is a Warning jsut checking from /work
+2023-05-07 02:16:37,518 This is a Warning jsut checking from /work
+2023-05-07 02:24:12,843 This is a Warning jsut checking from /work
+2023-05-07 02:26:17,519 This is a Warning jsut checking from /work

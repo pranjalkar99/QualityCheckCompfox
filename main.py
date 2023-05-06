@@ -1,6 +1,7 @@
 import datetime as dt
 from typing import Dict, List, Optional
 import json,os
+from google.cloud import storage
 from fastapi import BackgroundTasks, FastAPI
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
@@ -340,6 +341,19 @@ def test_get(request: Request,id):
 # async def load_work_id_next(request: Request, id: str,user: User = Depends(get_current_user_from_token)):
  
 
+
+
+@app.post("/upload-to-gcp")
+async def upload_to_gcp(request: Request):
+    data = await request.json()
+    bucket_name = 'checked_upload'
+    storage_client = storage.Client.from_service_account_json('compfox-367313-ad58ca97af3b.json')
+    # storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    for html in data['data']:
+        blob = bucket.blob(f'html/{html[:10]}.html')
+        blob.upload_from_string(html)
+    return {'message': 'Data uploaded successfully!'}
 
 @app.get("/work/{id}", response_class=HTMLResponse)
 async def load_work_id(request: Request, id: str,user: User = Depends(get_current_user_from_token)):
