@@ -336,16 +336,20 @@ def test_get(request: Request,id):
     }
     return templates.TemplateResponse("test.html", context)
 
+# @app.get("/work/{id}/next", response_class=HTMLResponse)
+# async def load_work_id_next(request: Request, id: str,user: User = Depends(get_current_user_from_token)):
+ 
+
 
 @app.get("/work/{id}", response_class=HTMLResponse)
 async def load_work_id(request: Request, id: str,user: User = Depends(get_current_user_from_token)):
     obj = read.get(id, None)
     if not obj:
-        logging.warning('This is a Warning')
+        logging.warning('This is a Warning as obj is not found in db')
         return "Error: Object not found"
 
     pages = obj['html']
-    logging.warning('This is a Warning')
+    logging.warning('This is a Warning jsut checking from /work')
 
     # if request.method == 'POST':
         # global current_page
@@ -354,13 +358,21 @@ async def load_work_id(request: Request, id: str,user: User = Depends(get_curren
     context = {
         "request": request,
         "pages": pages,
-        "current_page": 0,
+        "current_page": '0',
         "obj": obj,
         "user":user,
     }
     return templates.TemplateResponse("work_id.html", context)
 
 
+@app.exception_handler(HTTPException)
+async def session_ended_exception_handler(request, exc):
+    context = {
+        "request": request,
+    }
+    if exc.detail == "Could not validate credentials.":
+        return templates.TemplateResponse("session_end.html",context)
+    return templates.TemplateResponse("some_error.html",context)
 
 # --------------------------------------------------------------------------
 # Login - GET

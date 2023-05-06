@@ -8,9 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap" rel="stylesheet">
   <script>
-    function displayHTML(html) {
-      document.getElementById("htmlContainer").innerHTML = html;
-    }
+    
   </script>
   <style>
 
@@ -22,21 +20,22 @@
     <h4 class="fonty">Hello {{ user.username }}!</h4>
     
 
-
+    
     <hr>
   <!-- make it a nav bar @Rajdeep-->
   <div class="p-2">
     <div class=" px-3 py-2 rounded text-white bg-dark">
-      <h3 class="mb-2">You are viewing Part-{{current_page}} of the html {{id}}</h3>
+      <div><h3 class="mb-2">You are viewing Part-<span id="updatenum">1</span><span> out of {{pages|length - 1| int}} parts for the html {{id}}</span></h3></div>
       <h5 class="mb-1"> Note: Inspect elements, update the html, and then right click and download. </h5>
       <h6>P.S : Common elements to be added: <em>font-weight: bold;</em> and text props like:<em> text-align: left;</em>
       </h6>
-      <b><em style="color:red;">Changes made are not saved in server for now. Kindly download ur changes by clicking-> Save HTML and download.</em></b>
+      <b><em style="color:red;">Changes need some time to upload in  server. Kindly wait until message is received.</em></b>
 
     </div>
 
     <!-- This is the body container-->
     <div class="d-flex mx-4 my-5 ">
+  
 
       <div id="editor" contenteditable="true"
         class="w-75 d-flex align-items-center px-2 py-0 rounded bg-light form-control">
@@ -50,31 +49,126 @@
             a.download = "content.html";
             a.click();
           }
-          document.getElementById("editor").innerHTML = `
-                <div id="htmlContainer">
-                    {{ obj['html']['0']|safe }}
-                  </div>
-                  `
-          function saveHTML() {
-            const editor = document.getElementById("editor");
-            editor.contentEditable = "false";
-            editor.style.backgroundColor = "#eee";
-            var gfg = document.URL;
-            time = new Date().getTime();
-            alert("Content saved!");
-            const blob = new Blob([editor.innerHTML], { type: "text/html" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            
-            a.download = gfg+"_"+time+".html";
-            a.click();
-          }
-
-          // write a update_status function here
-          function update_status() {
+        
+         
           
 
+          document.getElementById("editor").innerHTML = `
+                <div id="htmlContainer">
+                  {{ pages[current_page]|safe}}
+                  </div>
+                  `
+                  
+          
+  
+                  function saveHTMLlocal() {
+                    const num=document.getElementById("updatenum").innerHTML;
+                    const editor = document.getElementById("editor");
+                    const gfg = document.URL;
+                    const time = new Date().getTime();
+                    const html = editor.innerHTML;
+                    const metadata = {
+                      contentType: "text/html",
+                      size: html.length,
+                      lastModified: new Date().getTime(),
+                      num:num,
+                    };
+                    
+                    const data = {
+                      metadata: metadata,
+                      html: html,
+                    };
+                    
+                    const jsonString = JSON.stringify(data);
+                    localStorage.setItem(gfg, jsonString);
+                    
+                    const a = document.createElement("a");
+                    a.href = "data:text/html;charset=utf-8," + encodeURIComponent(html);
+                    a.download = gfg + "_" + time + ".html";
+                    a.click();
+                    
+                    alert("<b>Content saved in your browser local! To preserve your changes, click 'Save changes to GCP', after completing all pages...</b> <p>You can see your changes, in this download.</p>");
+                  }
+                  
+//
+          //function saveHTMLlocal() {
+          //  const editor = document.getElementById("editor");
+          //  const gfg = document.URL;
+          //  const time = new Date().getTime();
+          //  const blob = new Blob([editor.innerHTML], { type: "text/html" });
+          //  const metadata = {
+          //    contentType: blob.type,
+          //    size: blob.size,
+          //    lastModified: blob.lastModified,
+          //    //contentHTML: editor.outerHTML;
+          //  };
+            //
+          //  const data = {
+          //    metadata: metadata,
+          //    url: URL.createObjectURL(blob),
+          //    //content: blob.text,
+          //  };
+            //
+          //  const jsonString = JSON.stringify(data);
+          //
+          //  const filename = gfg + "_"  + ".json";
+          //  const storageKey = "current/" + filename;
+            //
+          //  // Check if the page already exists in localStorage
+          //  const existingData = localStorage.getItem(storageKey);
+          //  console.log(existingData);
+          //  console.log("wabba lubba dub dub");
+          //  if (existingData) {
+          //    const existingJson = JSON.parse(existingData);
+          //    existingJson.metadata = metadata;
+          //    existingJson.url = URL.createObjectURL(blob);
+          //    existingJson.content = blob.text;
+          //    localStorage.setItem(storageKey, JSON.stringify(existingJson));
+          //  } else {
+          //    localStorage.setItem(storageKey, jsonString);
+          //  }
+            //
+          //  const a = document.createElement("a");
+          //  a.href = URL.createObjectURL(blob);
+          //  a.download = gfg + "_" + time + ".html";
+          //  a.click();
+            //
+          //  alert("<b>Content saved in your browser local! To preserve your changes, click 'Save changes to GCP', after completing all pages...</b> <p>You can see your changes, in this download.</p>");
+          //}
+          
+          function nextHtml(){
+            const editor = document.getElementById("htmlContainer");
+            {% set next_page = current_page|int + 1 if (current_page|int + 1 < pages|length) else 0 %}
+            {% set current_page = next_page|string%}
+            {% set show_page_num = next_page|int + 1 %}
+            const updatenum=document.getElementById("updatenum");
+            updatenum.innerHTML=`{{show_page_num}}`;
+            editor.innerHTML=`
+              {{ pages[current_page]|safe}}
+              `
+              saveHTMLlocalbg(current_page);
+          }
+          
+          function show_final_button(){
+            const final_butt=document.getElementById("updatenum");
+            if (final_butt.innerHTML=={{pages| length -1}}){
+              console.log("ya bitch!!")
+            }
+          }// Not working --> iT is a bug!!!
+
+
+          function uploadToGCP() {
+            console.log("update status");
+
+            alert("Uploading to GCP," );
+            console.log("updating status to GCP.");
+          }
+          // write a update_status function here
+          function update_status() {
+            console.log("update status");
+
             alert("Status Updated," );
+            console.log("update status");
           }
           document.getElementById("save-button").addEventListener("click", saveHTML);
         </script>
@@ -82,15 +176,23 @@
       <!-- Button to save-->
       <div class="ms-4 d-flex col-md-3 justify-content-between">
         <div>
-          <button class="btn btn-primary" onclick=saveHTML()>Save HTML and download</button>
-          <p class="m-0 small opacity-75"><del>(Dont forget to
-            rename_for_proper
-            retention.)</del> <ins>{Now renamed_accordingly!}</ins></p>
-        </div>
-        <form method="post">
-          <button type="submit" class="btn btn-success px-4">Next Page</button>
-        </form>
+          <button type="submit" class="btn btn-success px-4 mx-2" onclick=nextHtml()>Next Page</button>
+          <p class="small opacity-75"> <ins>Click after saving this page!</ins></p>
+          <button class="btn btn-primary mx-2" onclick=saveHTML()>Save this page HTML changes(in Local)</button>
+          <p class="small opacity-75"> <ins>Click to save changes.</ins></p>
+          <button class="btn btn-primary mx-2" onclick=saveHTMLlocal()>Save (  test)this page HTML changes(in Local)</button>
+          <p class="small opacity-75"> <ins>Click to save changes.</ins></p>
+          
+          <span id="show-final-button">
+          <button class="btn btn-danger mx-2" onclick=uploadToGCP()>Save all pages changes to GCP</button>
+          <p class="small opacity-75"> <ins>Warning: Changes will be uploaded to GCP.</ins> <ins>Warning: Only use, after all parts of the file is done..</ins></p>
+          
+          </span>
+         
       
+      
+        </div>
+        
 
       </div>
     </div>
